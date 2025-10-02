@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', Courier New, Courier, monospace;
+            background: #ffffff;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px; /* Space for fixed footer */
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.8) 0%, rgba(230, 240, 250, 0.8) 50%, rgba(220, 235, 245, 0.8) 100%);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(173, 216, 230, 0.5);
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #4682B4;
+            animation: fadeIn 1s ease-out, float 4s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #4682B4;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #4682B4;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #2980B9;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 0;
+            animation: slideUp 1s ease-out;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(70, 130, 180, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #4682B4, #5DADE2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s infinite alternate, float 6s ease-in-out infinite;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #5DADE2;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+            animation: slideUp 1.2s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .intro {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #2C3E50;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.05);
+            animation: slideUp 1.4s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .skills {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .skill {
+            background: rgba(173, 216, 230, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: fadeIn 0.5s ease-out;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill:hover {
+            background: rgba(70, 130, 180, 0.5);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(70, 130, 180, 0.4);
+        }
+
+        .skill:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .skill:hover:after {
+            left: 100%;
+        }
+
+        .skill.active {
+            background: rgba(70, 130, 180, 0.7);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 250px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.6s ease-out;
+            transform: translateY(0);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(70, 130, 180, 0.3);
+            z-index: 10;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(70, 130, 180, 0.9), transparent);
+            padding: 1.5rem 1rem 1rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .gallery-desc {
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3);
+        }
+
+        .gallery-item:hover .gallery-desc {
+            opacity: 1;
+        }
+
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(70, 130, 180, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .about-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #4682B4, #5DADE2);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 2rem; /* Add space below bio block */
+        }
+
+        .about-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .about-container:hover .about-image {
+            transform: translateX(10px);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .about-container:hover .about-image img {
+            transform: scale(1.05);
+        }
+
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .about-section {
+            margin: 2rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .about-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .about-section:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .about-section:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .about-section h3 {
+            color: #4682B4;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .about-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .floating-icons {
+            position: fixed;
+            bottom: 70px; /* Adjusted to avoid footer overlap */
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(173, 216, 230, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            transform: scale(1);
+        }
+
+        .icon:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .icon:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .icon:hover {
+            transform: scale(1.4) rotate(15deg);
+            background: #4682B4;
+            color: white;
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+        }
+
+        .icon:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .icon:hover:after {
+            left: 100%;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 1rem 0;
+            color: #5DADE2;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(173, 216, 230, 0.5);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        footer:hover {
+            transform: translateY(-3px);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            position: relative;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4682B4;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .enlarged-img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .enlarged-img:hover {
+            transform: scale(1.02);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(70, 130, 180, 0.4);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px rgba(70, 130, 180, 0.5); }
+            to { text-shadow: 0 0 20px rgba(93, 173, 226, 0.8); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .bounce {
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-icons {
+                bottom: 70px; /* Adjusted for mobile */
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .floating-icons {
+                bottom: 70px; /* Adjusted for mobile */
+                right: 1rem;
+            }
+            
+            .icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .about-section {
+                animation: fadeIn 0.6s ease-out forwards;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">Portfolio</div>
+            <nav>
+                <ul>
+                    <li><a class="nav-link" data-section="home" href="#home">Home</a></li>
+                    <li><a class="nav-link" data-section="photo-gallery" href="#photo-gallery">Photo Gallery</a></li>
+                    <li><a class="nav-link" data-section="about" href="#about">About</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Portfolio</h1>
+                <div class="subtitle">AI Enthusiast & Photographer</div>
+                <p class="intro">
+                    Welcome to my digital space where artificial intelligence meets artistic expression. 
+                    I create innovative solutions and capture moments that tell compelling stories.
+                </p>
+                
+                <div class="skills">
+                    <div class="skill" data-skill="Machine Learning">Machine Learning</div>
+                    <div class="skill" data-skill="Computer Vision">Computer Vision</div>
+                    <div class="skill" data-skill="Photography">Photography</div>
+                    <div class="skill" data-skill="Generative AI">Generative AI</div>
+                    <div class="skill" data-skill="Data Visualization">Data Visualization</div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="photo-gallery" class="section">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #4682B4; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Photo Gallery</h2>
+            <div class="gallery">
+                <div class="gallery-item" data-img="https://placehold.co/800x600/4682B4/FFFFFF?text=AI+Portrait">
+                    <img src="https://placehold.co/600x400/4682B4/FFFFFF?text=AI+Portrait" alt="AI Portrait" class="gallery-img">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">AI Generated Portrait</div>
+                        <div class="gallery-desc">Exploring the intersection of artificial intelligence and human expression through digital art.</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-img="https://placehold.co/800x600/5DADE2/FFFFFF?text=Neural+Nature">
+                    <img src="https://placehold.co/600x400/5DADE2/FFFFFF?text=Neural+Nature" alt="Neural Nature" class="gallery-img">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">Neural Landscapes</div>
+                        <div class="gallery-desc">Landscapes reimagined through the lens of neural networks and generative algorithms.</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-img="https://placehold.co/800x600/3498DB/FFFFFF?text=Tech+Patterns">
+                    <img src="https://placehold.co/600x400/3498DB/FFFFFF?text=Tech+Patterns" alt="Tech Patterns" class="gallery-img">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">Digital Patterns</div>
+                        <div class="gallery-desc">Abstract representations of data flows and algorithmic processes in nature.</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-img="https://imgs.search.brave.com/GY8DjH_yORnpd3XxYxD0nuH3RL2P_vRrNDYw5Cuau8U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wcmV2/aWV3LnJlZGQuaXQv/d2h5LWlzLXRoZXJl/LWEtcGljdHVyZS1v/Zi1oaWRlby1rb2pp/bWEtdjAtbGN4b2Rm/azl6a2ZmMS5qcGVn/P3dpZHRoPTExNjkm/Zm9ybWF0PXBqcGcm/YXV0bz13ZWJwJnM9/NDJhMjA4ZmZmMjg0/OWE0OTBhYjNjMDM4/OTA0MGUzMzI2Y2Vk/NDBlNg">
+                    <img src="https://imgs.search.brave.com/GY8DjH_yORnpd3XxYxD0nuH3RL2P_vRrNDYw5Cuau8U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wcmV2/aWV3LnJlZGQuaXQv/d2h5LWlzLXRoZXJl/LWEtcGljdHVyZS1v/Zi1oaWRlby1rb2pp/bWEtdjAtbGN4b2Rm/azl6a2ZmMS5qcGVn/P3dpZHRoPTExNjkm/Zm9ybWF0PXBqcGcm/YXV0bz13ZWJwJnM9/NDJhMjA4ZmZmMjg0/OWE0OTBhYjNjMDM4/OTA0MGUzMzI2Y2Vk/NDBlNg" alt="Medium Quality Hideo Kojima" class="gallery-img">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">Hideo Kojima</div>
+                        <div class="gallery-desc">Medium Quality</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-img="https://placehold.co/800x600/1A5490/FFFFFF?text=AI+Creativity">
+                    <img src="https://placehold.co/600x400/1A5490/FFFFFF?text=AI+Creativity" alt="AI Creativity" class="gallery-img">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">Creative Algorithms</div>
+                        <div class="gallery-desc">Artistic exploration of how artificial intelligence can generate creative content.</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-img="https://placehold.co/800x600/2874A6/FFFFFF?text=Future+Tech">
+                    <img src="https://placehold.co/600x400/2874A6/FFFFFF?text=Future+Tech" alt="Future Tech" class="gallery-img">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">Future Technology</div>
+                        <div class="gallery-desc">Visualizing the potential of AI in transforming our technological landscape.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="about" class="section">
+            <div class="about-container">
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="https://placehold.co/600x400/4682B4/FFFFFF?text=Professional+Photo" alt="Professional Photo">
+                    </div>
+                    <div class="about-text">
+                        <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: #4682B4; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">About Me</h1>
+                        <p style="line-height: 1.6; margin-bottom: 1rem;">
+                            I'm a passionate AI researcher and photographer with over 5 years of experience in creating innovative solutions 
+                            that bridge the gap between technology and art. My work focuses on developing AI systems that can understand 
+                            and create visual content, pushing the boundaries of what's possible in creative technology.
+                        </p>
+                        <p style="line-height: 1.6;">
+                            When I'm not debugging neural networks, you can find me exploring the world with my camera, 
+                            capturing moments that tell stories. I believe that both AI and photography are about seeing 
+                            patterns and creating meaningful connections between elements.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="about-section">
+                    <h3>What I'm Working On</h3>
+                    <p>
+                        Currently, I'm developing an AI-powered photography assistant that helps users compose better shots 
+                        in real-time. This project combines my expertise in computer vision with my passion for photography, 
+                        creating tools that enhance rather than replace human creativity.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2025 Portfolio. All rights reserved.</p>
+        </footer>
+
+    <div class="modal" id="skillModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modalTitle" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Skill Details</h2>
+            <p id="modalContent" style="text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.05);">This is where skill details will appear.</p>
+        </div>
+    </div>
+    
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="close-btn" id="imageCloseBtn">&times;</span>
+            <img id="enlargedImg" class="enlarged-img" src="" alt="Enlarged view">
+        </div>
+    </div>
+
+    <script>
+        // Add animation to gallery items on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const skills = document.querySelectorAll('.skill');
+            const modal = document.getElementById('skillModal');
+            const imageModal = document.getElementById('imageModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const enlargedImg = document.getElementById('enlargedImg');
+            const closeBtn = document.querySelector('.close-btn');
+            const imageCloseBtn = document.getElementById('imageCloseBtn');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            // Skill descriptions
+            const skillDescriptions = {
+                "Machine Learning": "Expertise in developing predictive models, neural networks, and deep learning algorithms to solve complex problems.",
+                "Computer Vision": "Experience in image recognition, object detection, and visual processing using convolutional neural networks.",
+                "Photography": "Capturing moments through artistic vision, composition, and technical expertise in various photography genres.",
+                "Generative AI": "Creating innovative content using GANs, VAEs, and transformer models for text, image, and audio generation.",
+                "Data Visualization": "Transforming complex datasets into compelling visual narratives using interactive charts and dashboards.",
+                "AI Research": "Exploring cutting-edge developments in artificial intelligence and machine learning methodologies.",
+                "Creative Coding": "Using programming to create interactive art, visual experiences, and digital installations.",
+                "Visual Design": "Crafting compelling visual narratives through thoughtful design principles and aesthetic sensibilities."
+            };
+            
+            // Add ripple effect to buttons and clickable elements
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement("span");
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+                circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+                circle.classList.add("ripple");
+
+                const ripple = button.getElementsByClassName("ripple")[0];
+                if (ripple) {
+                    ripple.remove();
+                }
+
+                button.appendChild(circle);
+            }
+            
+            // Add click functionality to skills
+            skills.forEach(skill => {
+                skill.addEventListener('click', function(e) {
+                    createRipple(e);
+                    const skillName = this.getAttribute('data-skill');
+                    modalTitle.textContent = skillName;
+                    modalContent.textContent = skillDescriptions[skillName];
+                    modal.classList.add('active');
+                    
+                    // Add active class for visual feedback
+                    skills.forEach(s => s.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Close skill modal when clicking close button
+            closeBtn.addEventListener('click', function(e) {
+                createRipple(e);
+                modal.classList.remove('active');
+            });
+            
+            // Close skill modal when clicking outside content
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Image modal functionality
+            galleryItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    createRipple(e);
+                    const imgSrc = this.getAttribute('data-img');
+                    enlargedImg.src = imgSrc;
+                    imageModal.classList.add('active');
+                });
+            });
+            
+            // Close image modal when clicking close button
+            imageCloseBtn.addEventListener('click', function(e) {
+                createRipple(e);
+                imageModal.classList.remove('active');
+            });
+            
+            // Close image modal when clicking outside content
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    imageModal.classList.remove('active');
+                }
+            });
+            
+            // Navigation functionality with animations
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    createRipple(e);
+                    e.preventDefault();
+                    
+                    // Get target section
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show target section with animation
+                    setTimeout(() => {
+                        document.getElementById(targetSection).classList.add('active');
+                    }, 100);
+                    
+                    // Update active nav link
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Add animation to gallery items on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease-out';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            galleryItems.forEach(item => {
+                observer.observe(item);
+            });
+            
+            // Add hover effect to all gallery items
+            galleryItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.03)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Add hover effect to icons
+            const icons = document.querySelectorAll('.icon');
+            icons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.4) rotate(15deg)';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
+            
+            // Add parallax effect to header on scroll
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelector('.gradient-bg');
+                const speed = scrolled * 0.5;
+                parallax.style.transform = `translateY(${speed}px)`;
+            });
+            
+            // Add scroll animations
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                
+                // Parallax effect for hero background
+                const hero = document.querySelector('.hero');
+                if (hero) {
+                    hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
+                }
+                
+                // Fade in elements as they come into view
+                const elements = document.querySelectorAll('.about-section, .gallery-item, .skill');
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.style.opacity = 1;
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
